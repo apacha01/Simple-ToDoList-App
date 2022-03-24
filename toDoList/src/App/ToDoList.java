@@ -130,19 +130,25 @@ public class ToDoList {
     
     //MUESTRA TODAS LAS TAREAS
     private void showList(){
-        for(Task t: tasks){
-            int i = 1;
-            System.out.println( i + " - " + t.getName() + "\t" + priorityString(t) + "\t" + isTaskDone(t));
-            i++;
+        if (!(tasks.size()>0)) {
+            System.out.println("No hay tareas en la lista");
         }
-        System.out.println("");
+        else{
+            int i = 1;
+            System.out.println("\n-------- LISTA DE TAREAS --------");
+            for(Task t: tasks){
+                System.out.println("" + i + " - " + t.getName() + "\t\t" + priorityString(t) + "\t" + isTaskDone(t));
+                i++;
+            }
+            System.out.println("\n");
+        }
     }
     
     //PREGUNTA LA EQTIQUETA QUE VA EN LA TAREA Y LA DEVUELVE
     private String askTaskName(){
         Scanner in = new Scanner(System.in);
         
-        System.out.println("Ingrese la etiqueta para la tarea:");
+        System.out.println("\nIngrese la etiqueta para la tarea:");
         String taskName = in.nextLine();
         
         return taskName;
@@ -152,26 +158,27 @@ public class ToDoList {
     private int askTaskPr(){
         Scanner in = new Scanner(System.in);
         
-        System.out.println("Ingrese la priodad de la tarea:\n1 - Importancia Baja\n2 - Importancia Media\n3 - Importancia Alta");
-        int pr = in.nextInt() - 1;
+        System.out.println("\nIngrese la priodad de la tarea:\n1 - Importancia Baja\n2 - Importancia Media\n3 - Importancia Alta");
+        String pr = in.next();
         
-        while(pr != 0 || pr != 1 || pr != 2){
-            System.out.println("Ingrese un número entre 1 y 3...");
-            pr = in.nextInt() - 1;
+        while(!pr.equals("1") && !pr.equals("2") && !pr.equals("3")){
+            System.out.println("\nIngrese un número entre 1 y 3...");
+            pr = in.next();
         }
-        return pr;
+        
+        return Integer.parseInt(pr)-1;
     }
     
     //PREGUNTA EL ESTADO DE LA TAREA Y LO DEVUELVE
     private boolean askTaskState(){
         Scanner in = new Scanner(System.in);
         
-        System.out.println("¿Marcar como completada? /t S/N");
+        System.out.println("\n¿Marcar como completada? /t S/N");
         char ans = in.next().charAt(0);
         
-        while(ans!='s' || ans!='S' || ans!='n' || ans!='N'){
-            System.out.println("Ingrese S o s para Sí o N o n para No");
-            System.out.println("¿Marcar como completada? /t S/N");
+        while(ans!='s' && ans!='S' && ans!='n' && ans!='N'){
+            System.out.println("\nIngrese S o s para Sí o N, o n para No.");
+            System.out.println("¿Marcar como completada?\tS/N");
             ans = in.next().charAt(0);
         }
         
@@ -188,11 +195,11 @@ public class ToDoList {
     private int checkOut(){
         Scanner in = new Scanner(System.in);
         
-        System.out.println("Ingrese la tarea en la que desee realizar la acción. Para salir de esta opción ingrese: 0.");
+        System.out.println("\nIngrese el numero de la tarea en la que desee realizar la acción. Para salir de esta opción ingrese: 0.");
         int index = in.nextInt() - 1;
 
-        while(index < -1 || index > tasks.size()){
-            System.out.println("Esa tarea no existe, por favor ingrese un numero del 1 al " + tasks.size());
+        while(index < -1 || index > tasks.size()-1){
+            System.out.println("\nEsa tarea no existe, por favor ingrese un numero del 1 al " + tasks.size());
             index = in.nextInt() - 1;
         }
         
@@ -202,10 +209,10 @@ public class ToDoList {
     //AGREGA UNA TAREA A LA LISTA
     private void addTask(){
         Scanner in = new Scanner(System.in);
-        System.out.println("Si desea agregar una tarea ingrese: 1, si quiere salir de esta opción presione cualquier otra tecla.");
-        String ans = in.nextLine();
+        System.out.println("\nSi desea agregar una tarea ingrese: 1, si quiere salir de esta opción presione cualquier otra tecla.");
+        String ans = in.next();
         
-        if (ans == "1") {
+        if (ans.equals("1")) {
             String taskName = askTaskName();
             int pr = askTaskPr();
 
@@ -262,7 +269,7 @@ public class ToDoList {
                 tasks.get(index).setIsDone(askTaskState());
             }
         }
-        else{System.out.println("No tienes tareas para remover");}
+        else{System.out.println("No tienes tareas para editar");}
     }
     
     //INTERCAMBIA DOS TAREAS DENTRO DE UNA LISTA (PARA ORDENAR)

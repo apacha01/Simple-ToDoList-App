@@ -4,7 +4,8 @@ package App;
 public class Main {
 
     public static void main(String[] args) {
-        // TODO code application logic here
+        ToDoList list1 = new ToDoList();
+        list1.run();
     }
     
 }
