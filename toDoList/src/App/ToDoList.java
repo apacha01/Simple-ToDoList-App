@@ -4,7 +4,7 @@ package App;
 import java.util.*;
 
 public class ToDoList {
-    List<Task> tasks = new ArrayList<Task>();
+    static List<Task> tasks = new ArrayList<>();
     
     //VARIABLES
     public static final int SHOW_LIST = 0;
@@ -60,39 +60,38 @@ public class ToDoList {
     //EJECUTA LA OPCIÓN ELEGIDA.
     private void runOption(int choice){
         switch (choice){
-            case SHOW_LIST:
-                showList();
-                break;
-            case ADD_TASK:
+            case SHOW_LIST -> showList();
+            case ADD_TASK -> {
                 addTask();
                 showList();
                 System.out.println("");
-                break;
-            case REMOVE_TASK:
+            }
+            case REMOVE_TASK -> {
                 removeTask();
                 showList();
                 System.out.println("");
-                break;
-            case MARK_AS_DONE:
+            }
+            case MARK_AS_DONE -> {
                 markAsDone();
                 showList();
                 System.out.println("");
-                break;
-            case EDIT_TASK:
+            }
+            case EDIT_TASK -> {
                 editTask();
                 showList();
                 System.out.println("");
-                break;
-            case ORDER_BY_PRIORITY:
+            }
+            case ORDER_BY_PRIORITY -> {
                 orderByPriority();
                 showList();
                 System.out.println("");
-                break;
-            case EXIT:
+            }
+            case EXIT -> {
                 System.out.println("");
                 exit();
-                break;
-            default: break;
+            }
+            default -> {
+            }
         }
     }
     
@@ -112,18 +111,13 @@ public class ToDoList {
     private String priorityString(Task t){
         String s;
         switch(t.getPriority()){
-            case Task.LOW_IMPORTANCE:
-                s = "Importancia baja";
-                break;
-            case Task.MEDIUM_IMPORTANCE:
-                s = "Importancia media";
-                break;
-            case Task.HIGH_IMPORTANCE:
-                s = "Importancia alta";
-                break;
-            default: 
-                System.out.println("error");
+            case Task.LOW_IMPORTANCE -> s = "Importancia baja";
+            case Task.MEDIUM_IMPORTANCE -> s = "Importancia media";
+            case Task.HIGH_IMPORTANCE -> s = "Importancia alta";
+            default -> { 
+                System.out.println("error en priorityString");
                 s = "Este numero no esta en el rango de prioridades";
+            }
         }
         return s;
     }
@@ -179,12 +173,7 @@ public class ToDoList {
             char a = in.next().charAt(0);
             ans = a;
         }
-        if (ans == 's' || ans == 'S') {
-            return true;
-        }
-        else{
-            return false;
-        }
+        return ans == 's' || ans == 'S';
     }
     
     //PREGUNTA EL ESTADO DE LA TAREA Y LO DEVUELVE
@@ -200,10 +189,7 @@ public class ToDoList {
     
     //COMPRUEBA SI LA UN STRING SON NUMEROS, TRUE SI ES ASI
     private boolean isStringInt(String s){
-        if (s.matches("-?\\d+")) {
-            return true;
-        }
-        else{return false;}
+        return s.matches("-?\\d+"); //La que habia pensado yo: [0-9]+
     }
     
     //COMPRUEBA QUE LA OPCIÓN EXISTA
@@ -237,18 +223,6 @@ public class ToDoList {
             }
         }
         return Integer.parseInt(index)-1;
-        /*
-        Scanner in = new Scanner(System.in);
-        
-        System.out.println("\nIngrese el numero de la tarea en la que desee realizar la acción. Para salir de esta opción ingrese: 0.");
-        int index = in.nextInt() - 1;
-        
-        while(index < -1 || index > tasks.size()-1){
-            System.out.println("\nEsa tarea no existe, por favor ingrese un numero entero del 1 al " + tasks.size());
-            index = in.nextInt() - 1;
-        }
-        
-        return index;*/
     }
     
     //AGREGA UNA TAREA A LA LISTA
@@ -257,7 +231,7 @@ public class ToDoList {
         System.out.println("\nPara volver al menu presione cualquier tecla. Si quiere agregar una tarea presione: 1.");
         String ans = in.next();
         
-        if (ans.equals("1")) {
+        while (ans.equals("1")) {
             String taskName = askTaskName();
             int pr = askTaskPr();
 
@@ -267,8 +241,8 @@ public class ToDoList {
             
             System.out.println("¿Quiere agregar otra tarea?\tS/N");
             boolean add = askSN(in.next().charAt(0));
-            if (add) {
-                addTask();
+            if (!add) {
+                break;
             }
         }
     }
@@ -276,7 +250,6 @@ public class ToDoList {
     //ELIMINA UNA TAREA DE LA LISTA
     private void removeTask(){
         if (tasks.size() > 0) {
-            Scanner in = new Scanner(System.in);
             showList();
             
             int index = checkOut();
@@ -291,7 +264,6 @@ public class ToDoList {
     //CAMBIA EL ESTADO DE LA TAREA A TRUE (COMPLETADA)
     private void markAsDone(){
         if (tasks.size() > 0){
-            Scanner in = new Scanner(System.in);
             showList();
 
             int index = checkOut();
@@ -303,10 +275,9 @@ public class ToDoList {
         else{System.out.println("No tienes tareas para marcar como termanadas.");}
     }
     
-    //VUELVE A PREGUNTAR NOMBRE, PRIORIDAD Y ESTADO DE LA TAREA Y LO CAMBIA POR LA ELEGIDA
+    //VUELVE A PREGUNTAR NOMBRE, PRIORIDAD Y ESTADO DE LA TAREA Y LO CAMBIA
     private void editTask(){
         if (tasks.size() > 0) {
-            Scanner in = new Scanner(System.in);
             showList();
 
             int index = checkOut();
