@@ -162,7 +162,7 @@ public class ToDoList {
         String pr = in.next();
         
         while(!pr.equals("1") && !pr.equals("2") && !pr.equals("3")){
-            System.out.println("\nIngrese un número entre 1 y 3...");
+            System.out.println("\nIngrese un número entero entre 1 y 3...");
             pr = in.next();
         }
         
@@ -198,38 +198,63 @@ public class ToDoList {
         return state;
     }
     
-    //COMPRUEBA QUE NO HAYA PUESTO POR ERROR UNA OPCIÓN
+    //COMPRUEBA SI LA UN STRING SON NUMEROS, TRUE SI ES ASI
+    private boolean isStringInt(String s){
+        if (s.matches("-?\\d+")) {
+            return true;
+        }
+        else{return false;}
+    }
+    
+    //COMPRUEBA QUE LA OPCIÓN EXISTA
     private int checkOut(){
+        Scanner in = new Scanner(System.in);
+        
+        System.out.println("\nIngrese el numero de la tarea en la que desee realizar la acción. Para salir de esta opción ingrese: 0.");
+        String index = in.next();
+        boolean checkInput = isStringInt(index);
+        
+        while(true){
+            if (checkInput) {
+                while(index.equals("0") || (Integer.parseInt(index) > tasks.size())){
+                    System.out.println("\nEsa tarea no existe, por favor ingrese un numero del 1 al " + tasks.size() + " o 0 para salir.");
+                    index = in.next();
+                    checkInput = isStringInt(index);
+                    if (!checkInput) {
+                        break;
+                    }
+                }
+                if (checkInput) {
+                    break;
+                }
+            }
+            if (!checkInput) {
+                while(!checkInput){
+                    System.out.println("\nEsa tarea no existe, por favor ingrese un numero del 1 al " + tasks.size());
+                    index = in.next();
+                    checkInput = isStringInt(index);
+                }
+            }
+        }
+        return Integer.parseInt(index)-1;
+        /*
         Scanner in = new Scanner(System.in);
         
         System.out.println("\nIngrese el numero de la tarea en la que desee realizar la acción. Para salir de esta opción ingrese: 0.");
         int index = in.nextInt() - 1;
         
         while(index < -1 || index > tasks.size()-1){
-            System.out.println("\nEsa tarea no existe, por favor ingrese un numero del 1 al " + tasks.size());
+            System.out.println("\nEsa tarea no existe, por favor ingrese un numero entero del 1 al " + tasks.size());
             index = in.nextInt() - 1;
         }
         
-        return index;
-        /*
-        Scanner in = new Scanner(System.in);
-        
-        System.out.println("\nIngrese el numero de la tarea en la que desee realizar la acción. Para salir de esta opción ingrese: 0.");
-        String index = in.next();
-                                                                    MAL ACA
-        while(index.equals("0") || index.equals(Integer.toString(tasks.size()-1))){ 
-            System.out.println("\nEsa tarea no existe, por favor ingrese un numero del 1 al " + tasks.size());
-            index = in.next();
-        }
-        
-        return Integer.parseInt(index)-1;
-        */
+        return index;*/
     }
     
     //AGREGA UNA TAREA A LA LISTA
     private void addTask(){
         Scanner in = new Scanner(System.in);
-        System.out.println("\nSi desea agregar una tarea ingrese: 1, si quiere salir de esta opción presione cualquier otra tecla.");
+        System.out.println("\nPara volver al menu presione cualquier tecla. Si quiere agregar una tarea presione: 1.");
         String ans = in.next();
         
         if (ans.equals("1")) {
