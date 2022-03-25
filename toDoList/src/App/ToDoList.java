@@ -296,23 +296,22 @@ public class ToDoList {
     
     //INTERCAMBIA DOS TAREAS DENTRO DE UNA LISTA (PARA ORDENAR)
     private void changeTask(Task a, Task b){
-        Task aux;
-        aux = a;
-        a = b;
-        b = aux;
+        Task aux = new Task(a.getName(),a.getPriority());
+        //Intercambio de variables
+        a.setName(b.getName());
+        a.setPriority(b.getPriority());
+        b.setName(aux.getName());
+        b.setPriority(aux.getPriority());
     }
     
     //ORDENA POR PRIORIDAD DE MAS IMPORTANTE A MENOS IMPORTANTE
     private void orderByPriority(){
-        for (int i = 0; i < tasks.size()-1; i++) {
-            if (tasks.get(i).getPriority() < tasks.get(i+1).getPriority()) {
-                //tasks.sort(null); //Investigar el COMPARATOR 
-                int j = i;
-                while (j >= 0 && (tasks.get(i).getPriority() < tasks.get(i+1).getPriority())) 
-                {
-                    changeTask(tasks.get(j),tasks.get(j + 1));
-                    j--;
-                }
+        for (int i = 0; i < tasks.size()-1; i++) { 
+            int j = i;
+            while (j >= 0 && (tasks.get(j).getPriority() < tasks.get(j+1).getPriority())) 
+            {
+                changeTask(tasks.get(j),tasks.get(j + 1));
+                j--;
             }
         }
     }
