@@ -169,26 +169,33 @@ public class ToDoList {
         return Integer.parseInt(pr)-1;
     }
     
+    //PREGUNTA Y DEVUELVE UN TRUE OR FALSE DEPENDE LA ENTRADA (S O N)
+    private boolean askSN(char ans){
+        Scanner in = new Scanner(System.in);
+        
+        while(ans!='s' && ans!='S' && ans!='n' && ans!='N'){
+            System.out.println("\nIngrese S o s para Sí, o N o n para No.");
+            
+            char a = in.next().charAt(0);
+            ans = a;
+        }
+        if (ans == 's' || ans == 'S') {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    
     //PREGUNTA EL ESTADO DE LA TAREA Y LO DEVUELVE
     private boolean askTaskState(){
         Scanner in = new Scanner(System.in);
         
-        System.out.println("\n¿Marcar como completada? /t S/N");
+        System.out.println("\n¿Marcar como completada?/tS/N");
         char ans = in.next().charAt(0);
+        boolean state = askSN(ans);
         
-        while(ans!='s' && ans!='S' && ans!='n' && ans!='N'){
-            System.out.println("\nIngrese S o s para Sí o N, o n para No.");
-            System.out.println("¿Marcar como completada?\tS/N");
-            ans = in.next().charAt(0);
-        }
-        
-        if (ans == 's' || ans == 'S') {
-            return true;
-        }
-        if (ans == 'n' || ans == 'N') {
-            return false;
-        }
-        else return false;
+        return state;
     }
     
     //COMPRUEBA QUE NO HAYA PUESTO POR ERROR UNA OPCIÓN
@@ -197,13 +204,26 @@ public class ToDoList {
         
         System.out.println("\nIngrese el numero de la tarea en la que desee realizar la acción. Para salir de esta opción ingrese: 0.");
         int index = in.nextInt() - 1;
-
+        
         while(index < -1 || index > tasks.size()-1){
             System.out.println("\nEsa tarea no existe, por favor ingrese un numero del 1 al " + tasks.size());
             index = in.nextInt() - 1;
         }
         
         return index;
+        /*
+        Scanner in = new Scanner(System.in);
+        
+        System.out.println("\nIngrese el numero de la tarea en la que desee realizar la acción. Para salir de esta opción ingrese: 0.");
+        String index = in.next();
+                                                                    MAL ACA
+        while(index.equals("0") || index.equals(Integer.toString(tasks.size()-1))){ 
+            System.out.println("\nEsa tarea no existe, por favor ingrese un numero del 1 al " + tasks.size());
+            index = in.next();
+        }
+        
+        return Integer.parseInt(index)-1;
+        */
     }
     
     //AGREGA UNA TAREA A LA LISTA
@@ -219,6 +239,12 @@ public class ToDoList {
             Task t = new Task(taskName,pr);
 
             tasks.add(t);
+            
+            System.out.println("¿Quiere agregar otra tarea?\tS/N");
+            boolean add = askSN(in.next().charAt(0));
+            if (add) {
+                addTask();
+            }
         }
     }
     
@@ -274,7 +300,8 @@ public class ToDoList {
     
     //INTERCAMBIA DOS TAREAS DENTRO DE UNA LISTA (PARA ORDENAR)
     private void changeTask(Task a, Task b){
-        Task aux = new Task(a.getName(),a.getPriority());
+        Task aux;
+        aux = a;
         a = b;
         b = aux;
     }
@@ -285,7 +312,7 @@ public class ToDoList {
             if (tasks.get(i).getPriority() < tasks.get(i+1).getPriority()) {
                 //tasks.sort(null); //Investigar el COMPARATOR 
                 int j = i;
-                while (j >= 0 && (tasks.get(i+1).getPriority() > tasks.get(i).getPriority())) 
+                while (j >= 0 && (tasks.get(i).getPriority() < tasks.get(i+1).getPriority())) 
                 {
                     changeTask(tasks.get(j),tasks.get(j + 1));
                     j--;
