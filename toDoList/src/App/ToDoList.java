@@ -18,6 +18,8 @@ public class ToDoList {
     
     //INICIALIZACION DE LA APP
     public void run(){
+        System.out.println("-----------------");
+        System.out.println("To Do List App");
         while(running){
             printMenu();
             int choice = readOption();
@@ -27,8 +29,6 @@ public class ToDoList {
     
     //MENU
     private void printMenu(){
-        System.out.println("-----------------");
-        System.out.println("To Do List App");
         System.out.println("-----------------");
         System.out.println("1. Mostrar lista");
         System.out.println("2. Agregar tarea a la lista");
@@ -43,16 +43,17 @@ public class ToDoList {
     
     //LECTURA DE LA OPCION
     private int readOption(){
-        int choice;
+        int choice = -1;
         Scanner in = new Scanner(System.in);
-        
-        System.out.println("Seleccione la tarea que desea realizar:");
-        choice = in.nextInt()-1;
-        
-        while(choice >= 8 && choice <= 0){   
-            System.out.println("Ingrese un número entre 1 y 7...");   
+        try{
+            System.out.println("Seleccione la tarea que desea realizar:");
             choice = in.nextInt()-1;
-        }
+
+            while(choice >= 8 && choice <= 0){   
+                System.out.println("Ingrese un número entre 1 y 7...");   
+                choice = in.nextInt()-1;
+            }
+        }catch(InputMismatchException e){System.out.println("\nPor favor ingrese un numero entero correspondiente a la opción que desea implementar.\n");}
         
         return choice;
     }
@@ -148,19 +149,31 @@ public class ToDoList {
         return taskName;
     }
     
+    //PIDE UN ENTERO, SINO SE INGRESA UN ENTERO DEVUELVE -1
+    private int askInt(){
+        Scanner in = new Scanner(System.in);
+        int ans = -1;
+        
+        try{
+            ans = in.nextInt();
+        }catch(InputMismatchException e){System.out.println("\nEso no es un numero.");}
+        
+        return ans;
+    }
+    
     //PREGUNTA LA PRIORIDAD DE LA TAREA Y LA DEVUELVE
     private int askTaskPr(){
-        Scanner in = new Scanner(System.in);
+        int pr;
         
         System.out.println("\nIngrese la priodad de la tarea:\n1 - Importancia Baja\n2 - Importancia Media\n3 - Importancia Alta");
-        String pr = in.next();
+        pr = askInt() - 1;
         
-        while(!pr.equals("1") && !pr.equals("2") && !pr.equals("3")){
-            System.out.println("\nIngrese un número entero entre 1 y 3...");
-            pr = in.next();
+        while(!(pr == 0) && !(pr == 1) && !(pr == 2)){
+            System.out.println("Ingrese un número entero entre 1 y 3...");
+            pr = askInt() - 1;
         }
         
-        return Integer.parseInt(pr)-1;
+        return pr;
     }
     
     //PREGUNTA Y DEVUELVE UN TRUE OR FALSE DEPENDE LA ENTRADA (S O N)
@@ -180,49 +193,26 @@ public class ToDoList {
     private boolean askTaskState(){
         Scanner in = new Scanner(System.in);
         
-        System.out.println("\n¿Marcar como completada?/tS/N");
+        System.out.println("\n¿Marcar como completada?\tS/N");
         char ans = in.next().charAt(0);
         boolean state = askSN(ans);
         
         return state;
     }
     
-    //COMPRUEBA SI LA UN STRING SON NUMEROS, TRUE SI ES ASI
-    private boolean isStringInt(String s){
-        return s.matches("-?\\d+"); //La que habia pensado yo: [0-9]+
-    }
-    
     //COMPRUEBA QUE LA OPCIÓN EXISTA
     private int checkOut(){
-        Scanner in = new Scanner(System.in);
+        int index;
         
         System.out.println("\nIngrese el numero de la tarea en la que desee realizar la acción. Para salir de esta opción ingrese: 0.");
-        String index = in.next();
-        boolean checkInput = isStringInt(index);
+        index = askInt() - 1;
         
-        while(true){
-            if (checkInput) {
-                while(index.equals("0") || (Integer.parseInt(index) > tasks.size())){
-                    System.out.println("\nEsa tarea no existe, por favor ingrese un numero del 1 al " + tasks.size() + " o 0 para salir.");
-                    index = in.next();
-                    checkInput = isStringInt(index);
-                    if (!checkInput) {
-                        break;
-                    }
-                }
-                if (checkInput) {
-                    break;
-                }
-            }
-            if (!checkInput) {
-                while(!checkInput){
-                    System.out.println("\nEsa tarea no existe, por favor ingrese un numero del 1 al " + tasks.size());
-                    index = in.next();
-                    checkInput = isStringInt(index);
-                }
-            }
+        while(!(index == -1) && (index < 0 || index > tasks.size()-1)){
+            System.out.println("Por favor ingrese un numero del 1 al " + tasks.size() + ", o 0 para salir.");
+            index = askInt() - 1;
         }
-        return Integer.parseInt(index)-1;
+        
+        return index;
     }
     
     //AGREGA UNA TAREA A LA LISTA
@@ -234,7 +224,7 @@ public class ToDoList {
         while (ans.equals("1")) {
             String taskName = askTaskName();
             int pr = askTaskPr();
-
+            
             Task t = new Task(taskName,pr);
 
             tasks.add(t);
@@ -284,10 +274,10 @@ public class ToDoList {
             
             if (index != -1) {
                 String newTaskName = askTaskName();
-                int pr = askTaskPr();
+                int newPr = askTaskPr();
 
                 tasks.get(index).setName(newTaskName);
-                tasks.get(index).setPriority(pr);
+                tasks.get(index).setPriority(newPr);
                 tasks.get(index).setIsDone(askTaskState());
             }
         }
