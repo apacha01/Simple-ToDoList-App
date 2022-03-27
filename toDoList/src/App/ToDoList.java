@@ -10,10 +10,11 @@ public class ToDoList {
     public static final int SHOW_LIST = 0;
     public static final int ADD_TASK = 1;
     public static final int REMOVE_TASK = 2;
-    public static final int MARK_AS_DONE = 3;
-    public static final int EDIT_TASK = 4;
-    public static final int ORDER_BY_PRIORITY = 5;
-    public static final int EXIT = 6;
+    public static final int REMOVE_ALL_TASK = 3;
+    public static final int MARK_AS_DONE = 4;
+    public static final int EDIT_TASK = 5;
+    public static final int ORDER_BY_PRIORITY = 6;
+    public static final int EXIT = 7;
     private static boolean running = true;
     
     //INICIALIZACION DE LA APP
@@ -33,10 +34,11 @@ public class ToDoList {
         System.out.println("1. Mostrar lista");
         System.out.println("2. Agregar tarea a la lista");
         System.out.println("3. Eliminar tarea de la lista");
-        System.out.println("4. Marcar como terminado");
-        System.out.println("5. Editar tarea");
-        System.out.println("6. Ordenar por prioridad");
-        System.out.println("7. Salir");
+        System.out.println("4. Eliminar todas las tareas de la lista.");
+        System.out.println("5. Marcar como terminado");
+        System.out.println("6. Editar tarea");
+        System.out.println("7. Ordenar por prioridad");
+        System.out.println("8. Salir");
         System.out.println("-----------------");
         System.out.println("");
     }
@@ -70,6 +72,10 @@ public class ToDoList {
             case REMOVE_TASK -> {
                 removeTask();
                 showList();
+                System.out.println("");
+            }
+            case REMOVE_ALL_TASK -> {
+                removeAllTask();
                 System.out.println("");
             }
             case MARK_AS_DONE -> {
@@ -249,6 +255,16 @@ public class ToDoList {
             }
         }
         else{System.out.println("No tienes tareas para remover.");}
+    }
+    
+    //ELIMINA TODAS LAS TAREAS
+    private void removeAllTask(){
+        Scanner in = new Scanner(System.in);
+        System.out.println("¿Esta seguro que quiere eliminar TODAS las tareas?");
+        char ans = in.next().charAt(0);
+        if (askSN(ans)) {
+            tasks.removeAll(tasks);
+        }
     }
     
     //CAMBIA EL ESTADO DE LA TAREA A TRUE (COMPLETADA)
